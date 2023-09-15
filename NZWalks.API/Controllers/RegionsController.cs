@@ -54,5 +54,80 @@ namespace NZWalks.API.Controllers
 
             return Ok(regionDTO);
         }
+
+        [HttpPost]
+        public IActionResult CreateRegion([FromBody] RegionRequestDTO addRegionRequestDTO)
+        {
+
+
+            // Map to domain model
+
+            var Region = new Region()
+            {
+                Code = addRegionRequestDTO.Code,
+                Name = addRegionRequestDTO.Name,
+                RegionImageUrl = addRegionRequestDTO.RegionImageUrl
+            };
+
+            _context.Regions.Add(Region);
+            _context.SaveChanges();
+
+            var regionDTO = new RegionsDTO()
+            {
+                Id = Region.Id,
+                Code = Region.Code,
+                Name = Region.Name,
+                RegionImageUrl = Region.RegionImageUrl
+            };
+
+            return CreatedAtAction(nameof(CreateRegion), new { id = regionDTO.Id }, regionDTO);
+
+        }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult updateRegion([FromRoute] Guid id, RegionRequestDTO editRegionRequestDTO)
+        {
+            var region = _context.Regions.FirstOrDefault(x => x.Id == id);
+
+            if(region == null)
+            {
+                return NotFound();
+            }
+
+            region.Name = editRegionRequestDTO.Name;
+            region.Code = editRegionRequestDTO.Code;
+            region.RegionImageUrl = editRegionRequestDTO.RegionImageUrl;
+
+            _context.SaveChanges();
+
+
+            var regionDTO = new RegionsDTO()
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            };
+
+            return Ok(regionDTO);
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult deleteRegion([FromRoute] Guid id)
+        {
+            var region = _context.Regions.FirstOrDefault(x => x.Id == id);
+
+            if(region == null)
+            {
+                return NotFound();
+            }
+
+            _context.Regions.Remove(region);
+            _context.SaveChanges();
+
+            return Ok(region);
+        }
     }
 }
