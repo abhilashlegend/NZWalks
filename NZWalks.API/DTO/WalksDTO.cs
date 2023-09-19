@@ -1,7 +1,9 @@
 ﻿namespace NZWalks.API.DTO
 {
-    public class WalksRequestDTO
+    public class WalksDTO
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
