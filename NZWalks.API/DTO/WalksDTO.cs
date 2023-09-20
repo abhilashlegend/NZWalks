@@ -15,5 +15,9 @@
         public Guid DifficultyId { get; set; }
 
         public Guid RegionId { get; set; }
+
+        public RegionsDTO Region { get; set; }
+
+        public DifficultyDTO Difficulty { get; set; }
     }
 }
