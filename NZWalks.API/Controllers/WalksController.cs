@@ -36,9 +36,9 @@ namespace NZWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            var walks = await _repository.GetAllWalksAsync();
+            var walks = await _repository.GetAllWalksAsync(filterOn, filterQuery);
             if(walks == null)
             {
                 return NoContent();
