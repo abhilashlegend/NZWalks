@@ -18,13 +18,21 @@ namespace NZWalks.API.Repositories
             return walk;
         }
 
-        public async Task<List<Walk>> GetAllWalksAsync(string? filterOn = null, string? filterQuery = null)
+        public async Task<List<Walk>> GetAllWalksAsync(string? filterOn = null, string? filterQuery = null, string? sortOn = null, bool? isAscending = true)
         {
             var walks = _dbcontext.Walks.Include("Difficulty").Include("Region").AsQueryable();
             if(string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
             {
                 if(filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase)) {
                     walks = walks.Where(x => x.Name.Contains(filterQuery));
+                }
+            }
+
+            if(string.IsNullOrWhiteSpace(sortOn) == false)
+            {
+                if(sortOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = isAscending == true ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);    
                 }
             }
 
